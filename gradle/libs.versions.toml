@@ -28,7 +28,8 @@ kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serializa
 ksp-api = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 ksp-test = { module = "com.github.tschuchortdev:kotlin-compile-testing-ksp", version.ref = "ksp-test" }
 locale = { module = "com.vanniktech:multiplatform-locale", version.ref = "locale" }
-okio = { module = "com.squareup.okio:okio", version.ref = "okio" }
+okio-core = { module = "com.squareup.okio:okio", version.ref = "okio" }
+okio-fakefs = { module = "com.squareup.okio:okio-fakefilesystem", version.ref = "okio" }
 
 [bundles]
 
