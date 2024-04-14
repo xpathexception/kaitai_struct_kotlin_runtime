@@ -96,17 +96,19 @@ class OkioKaitaiStream : KaitaiStream {
      * Get current position of a stream pointer.
      * @return pointer position, number of bytes from the beginning of the stream
      */
-    override fun pos(): Long {
-        return handle.position(source) + (if ((bitsWriteMode && bitsLeft > 0)) 1 else 0)
-    }
+    override val pos: Long
+        get() {
+            return handle.position(source) + (if ((bitsWriteMode && bitsLeft > 0)) 1 else 0)
+        }
 
     /**
      * Get total size of the stream in bytes.
      * @return size of the stream in bytes
      */
-    override fun size(): Long {
-        return handle.size()
-    }
+    override val size: Long
+        get() {
+            return handle.size()
+        }
 
     //endregion
 
@@ -275,7 +277,7 @@ class OkioKaitaiStream : KaitaiStream {
                 }
             }
 
-            seek(pos() - 1)
+            seek(pos - 1)
 
             val c = sourceBuffer.readByte()
             if (c == term) {

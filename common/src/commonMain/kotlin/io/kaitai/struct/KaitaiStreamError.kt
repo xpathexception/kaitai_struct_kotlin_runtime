@@ -26,7 +26,7 @@ open class ValidationFailedError(
     protected val io: KaitaiStream?,
     srcPath: String,
 ) : KaitaiStructError(
-    (if (io != null) "at pos ${io.pos()}: " else "") + "validation failed: $msg", srcPath
+    (if (io != null) "at pos ${io.pos}: " else "") + "validation failed: $msg", srcPath
 )
 
 /**

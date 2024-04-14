@@ -46,6 +46,18 @@ abstract class KaitaiStream : Closeable {
     //region Stream positioning
 
     /**
+     * Get current position of a stream pointer.
+     * @return pointer position, number of bytes from the beginning of the stream
+     */
+    abstract val pos: Long
+
+    /**
+     * Get total size of the stream in bytes.
+     * @return size of the stream in bytes
+     */
+    abstract val size: Long
+
+    /**
      * Check if stream pointer is at the end of stream.
      * @return true if we are located at the end of the stream
      */
@@ -63,18 +75,6 @@ abstract class KaitaiStream : Closeable {
      * @param newPos new position (offset in bytes from the beginning of the stream)
      */
     abstract fun seek(newPos: Long)
-
-    /**
-     * Get current position of a stream pointer.
-     * @return pointer position, number of bytes from the beginning of the stream
-     */
-    abstract fun pos(): Long
-
-    /**
-     * Get total size of the stream in bytes.
-     * @return size of the stream in bytes
-     */
-    abstract fun size(): Long
 
     //endregion
 
@@ -289,7 +289,7 @@ abstract class KaitaiStream : Closeable {
     //region Writing
 
     protected fun ensureBytesLeftToWrite(n: Long, pos: Long) {
-        val bytesLeft = size() - pos
+        val bytesLeft = size - pos
         if (n > bytesLeft) {
             throw RuntimeException(
                 EOFException("requested to write $n bytes, but only $bytesLeft bytes left in the stream")
@@ -437,7 +437,7 @@ abstract class KaitaiStream : Closeable {
         // as if it were already aligned on a byte boundary), which ensures that
         // we report the same numbers of bytes here as readBitsInt*() methods
         // would.
-        ensureBytesLeftToWrite((bytesNeeded - (if (bitsLeft > 0) 1 else 0)).toLong(), pos().toLong())
+        ensureBytesLeftToWrite((bytesNeeded - (if (bitsLeft > 0) 1 else 0)).toLong(), pos.toLong())
 
         val bytesToWrite = bitsToWrite / 8
         bitsLeft = bitsToWrite and 7 // `bitsToWrite mod 8`
@@ -501,7 +501,7 @@ abstract class KaitaiStream : Closeable {
         // as if it were already aligned on a byte boundary), which ensures that
         // we report the same numbers of bytes here as readBitsInt*() methods
         // would.
-        ensureBytesLeftToWrite((bytesNeeded - (if (bitsLeft > 0) 1 else 0)).toLong(), pos().toLong())
+        ensureBytesLeftToWrite((bytesNeeded - (if (bitsLeft > 0) 1 else 0)).toLong(), pos.toLong())
 
         val bytesToWrite = bitsToWrite / 8
         val oldBitsLeft = bitsLeft
@@ -585,11 +585,7 @@ abstract class KaitaiStream : Closeable {
     //endregion
 
     fun toByteArray(): ByteArray {
-        val pos = pos().toLong()
-        seek(0)
-        val r = readBytesFull()
-        seek(pos)
-        return r
+        return lookupAt(0) { readBytesFull() }
     }
 
     abstract class WriteBackHandler(protected val pos: Long) {
@@ -610,14 +606,10 @@ abstract class KaitaiStream : Closeable {
     }
 
     protected fun writeBackChildStreams(parent: KaitaiStream?) {
-        val pos = pos()
-
-        for (child in childStreams) {
-            child.writeBackChildStreams(this)
+        lookup {
+            for (child in childStreams) child.writeBackChildStreams(this)
+            childStreams.clear()
         }
-
-        childStreams.clear()
-        seek(pos)
 
         if (parent != null) {
             writeBack(parent)
