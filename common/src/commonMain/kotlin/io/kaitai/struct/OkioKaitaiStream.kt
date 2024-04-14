@@ -66,37 +66,38 @@ class OkioKaitaiStream : KaitaiStream {
     override val isEof: Boolean get() = !(!sourceBuffer.exhausted() || (!bitsWriteMode && bitsLeft > 0))
 
     /**
-     * Set stream pointer to designated position (int).
-     * @param newPos new position (offset in bytes from the beginning of the stream)
-     */
-    override fun seek(newPos: Int) {
-        if (bitsWriteMode) {
-            writeAlignToByte()
-        } else {
-            alignToByte()
-        }
-
-        handle.reposition(source, newPos.toLong())
-    }
-
-    /**
-     * Set stream pointer to designated position (long).
-     *
+     * Set stream pointer to designated position (Long).
      * @param newPos new position (offset in bytes from the beginning of the stream)
      */
     override fun seek(newPos: Long) {
         if (newPos > Int.MAX_VALUE) {
             throw IllegalArgumentException("Java ByteBuffer can't be seeked past Integer.MAX_VALUE")
         }
-        seek(newPos.toInt())
+
+        if (bitsWriteMode) {
+            writeAlignToByte()
+        } else {
+            alignToByte()
+        }
+
+        handle.reposition(source, newPos)
+    }
+
+    /**
+     * Set stream pointer to designated position (Int).
+     *
+     * @param newPos new position (offset in bytes from the beginning of the stream)
+     */
+    override fun seek(newPos: Int) {
+        seek(newPos.toLong())
     }
 
     /**
      * Get current position of a stream pointer.
      * @return pointer position, number of bytes from the beginning of the stream
      */
-    override fun pos(): Int {
-        return handle.position(source).toInt() + (if ((bitsWriteMode && bitsLeft > 0)) 1 else 0)
+    override fun pos(): Long {
+        return handle.position(source) + (if ((bitsWriteMode && bitsLeft > 0)) 1 else 0)
     }
 
     /**

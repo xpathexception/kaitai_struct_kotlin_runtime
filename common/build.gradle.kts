@@ -1,6 +1,6 @@
 plugins {
     alias(libs.plugins.kotlin.multiplatform)
-    alias(libs.plugins.kotlin.kapt)
+    id("maven-publish")
 }
 
 kotlin {
@@ -8,12 +8,35 @@ kotlin {
     iosSimulatorArm64()
     sourceSets {
         commonMain.dependencies {
-            implementation(libs.kotlin.stdlib)
-            implementation(libs.okio.core)
-            implementation(libs.okio.fakefs)
+            api(libs.kotlin.stdlib)
+            api(libs.okio.core)
+            api(libs.okio.fakefs)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+        }
+    }
+}
+
+group = "io.kaitai.struct"
+version = "0.1.7"
+
+val javadocJar by tasks.registering(Jar::class) {
+    archiveClassifier.set("javadoc")
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("maven") {
+            artifact(javadocJar.get())
+
+            artifactId = "common"
+            groupId = project.group.toString()
+            version = project.version.toString()
+
+            pom {
+                name.set("common")
+            }
         }
     }
 }

@@ -6,21 +6,16 @@ package io.kaitai.struct
  *
  * @param _io stream object that this KaitaiStruct-based structure was parsed from.
  */
-open class KaitaiStruct(protected var _io: KaitaiStream) {
-    protected var _parent: KaitaiStruct? = null
-
-    fun _io(): KaitaiStream {
-        return _io
-    }
-
-    fun _parent(): KaitaiStruct? {
-        return _parent
-    }
+abstract class KaitaiStruct(io: KaitaiStream) {
+    open var _io: KaitaiStream = io
+        protected set
+    open var _parent: KaitaiStruct? = null
+        protected set
 
     /**
      * KaitaiStruct object that supports reading from a supplied stream object.
      */
-    abstract class ReadOnly(_io: KaitaiStream) : KaitaiStruct(_io) {
+    abstract class ReadOnly(io: KaitaiStream) : KaitaiStruct(io) {
         abstract fun _read()
     }
 
@@ -30,7 +25,7 @@ open class KaitaiStruct(protected var _io: KaitaiStream) {
      * stream object given explicitly. This also defines a few useful
      * shortcut methods.
      */
-    abstract class ReadWrite(_io: KaitaiStream) : ReadOnly(_io) {
+    abstract class ReadWrite(io: KaitaiStream) : ReadOnly(io) {
         abstract fun _write_Seq()
         abstract fun _check()
         abstract fun _fetchInstances() // FIXME: perhaps move directly into KaitaiStruct
@@ -41,13 +36,13 @@ open class KaitaiStruct(protected var _io: KaitaiStream) {
             _io.writeBackChildStreams()
         }
 
-        fun _write(io: KaitaiStream?) {
-            this._io = io!!
+        fun _write(io: KaitaiStream) {
+            _io = io
             _write()
         }
 
-        fun _write_Seq(io: KaitaiStream?) {
-            this._io = io!!
+        fun _write_Seq(io: KaitaiStream) {
+            _io = io
             _write_Seq()
         }
     }

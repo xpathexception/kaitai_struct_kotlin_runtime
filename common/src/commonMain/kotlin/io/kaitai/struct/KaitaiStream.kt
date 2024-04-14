@@ -3,6 +3,7 @@ package io.kaitai.struct
 import okio.*
 import kotlin.experimental.xor
 import kotlin.jvm.JvmField
+import kotlin.math.min
 
 /**
  * KaitaiStream provides implementation of
@@ -67,7 +68,7 @@ abstract class KaitaiStream : Closeable {
      * Get current position of a stream pointer.
      * @return pointer position, number of bytes from the beginning of the stream
      */
-    abstract fun pos(): Int
+    abstract fun pos(): Long
 
     /**
      * Get total size of the stream in bytes.
@@ -265,7 +266,7 @@ abstract class KaitaiStream : Closeable {
      */
     abstract fun readBytesFull(): ByteArray
 
-    abstract fun readBytesTerm(term: Byte, includeTerm: Boolean, consumeTerm: Boolean, eosError: Boolean): ByteArray?
+    abstract fun readBytesTerm(term: Byte, includeTerm: Boolean, consumeTerm: Boolean, eosError: Boolean): ByteArray
 
     /**
      * Checks if supplied number of bytes is a valid number of elements for Java
@@ -630,6 +631,26 @@ abstract class KaitaiStream : Closeable {
     }
 
     companion object {
+        fun byteArrayCompare(a: ByteArray, b: ByteArray): Int {
+            if (a contentEquals b) return 0
+
+            val al = a.size
+            val bl = b.size
+            val minLen = min(al.toDouble(), bl.toDouble()).toInt()
+
+            for (i in 0 until minLen) {
+                val cmp = (a[i].toInt() and 0xff) - (b[i].toInt() and 0xff)
+                if (cmp != 0) return cmp
+            }
+
+            // Reached the end of at least one of the arrays
+            return if (al == bl) {
+                0
+            } else {
+                al - bl
+            }
+        }
+
         fun bytesStripRight(bytes: ByteArray, padByte: Byte): ByteArray {
             var newLen = bytes.size
 
