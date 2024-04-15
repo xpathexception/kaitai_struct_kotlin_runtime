@@ -84,25 +84,25 @@ abstract class KaitaiStream : Closeable {
 
     //region Signed
 
-    abstract fun readS1(): Byte
+    abstract fun readS1(): IntS1
 
     //region Big-endian
 
-    abstract fun readS2be(): Short
+    abstract fun readS2be(): IntS2
 
-    abstract fun readS4be(): Int
+    abstract fun readS4be(): IntS4
 
-    abstract fun readS8be(): Long
+    abstract fun readS8be(): IntS8
 
     //endregion
 
     //region Little-endian
 
-    abstract fun readS2le(): Short
+    abstract fun readS2le(): IntS2
 
-    abstract fun readS4le(): Int
+    abstract fun readS4le(): IntS4
 
-    abstract fun readS8le(): Long
+    abstract fun readS8le(): IntS8
 
     //endregion
 
@@ -110,25 +110,25 @@ abstract class KaitaiStream : Closeable {
 
     //region Unsigned
 
-    abstract fun readU1(): Byte
+    abstract fun readU1(): IntU1
 
     //region Big-endian
 
-    abstract fun readU2be(): Short
+    abstract fun readU2be(): IntU2
 
-    abstract fun readU4be(): Int
+    abstract fun readU4be(): IntU4
 
-    abstract fun readU8be(): Long
+    abstract fun readU8be(): IntU8
 
     //endregion
 
     //region Little-endian
 
-    abstract fun readU2le(): Short
+    abstract fun readU2le(): IntU2
 
-    abstract fun readU4le(): Int
+    abstract fun readU4le(): IntU4
 
-    abstract fun readU8le(): Long
+    abstract fun readU8le(): IntU8
 
     //endregion
 
@@ -304,25 +304,25 @@ abstract class KaitaiStream : Closeable {
     /**
      * Writes one signed 1-byte integer.
      */
-    abstract fun writeS1(v: Byte)
+    abstract fun writeS1(v: IntS1)
 
     //region Big-endian
 
-    abstract fun writeS2be(v: Short)
+    abstract fun writeS2be(v: IntS2)
 
-    abstract fun writeS4be(v: Int)
+    abstract fun writeS4be(v: IntS4)
 
-    abstract fun writeS8be(v: Long)
+    abstract fun writeS8be(v: IntS8)
 
     //endregion
 
     //region Little-endian
 
-    abstract fun writeS2le(v: Short)
+    abstract fun writeS2le(v: IntS2)
 
-    abstract fun writeS4le(v: Int)
+    abstract fun writeS4le(v: IntS4)
 
-    abstract fun writeS8le(v: Long)
+    abstract fun writeS8le(v: IntS8)
 
     //endregion
 
@@ -330,25 +330,25 @@ abstract class KaitaiStream : Closeable {
 
     //region Unsigned
 
-    abstract fun writeU1(v: Byte)
+    abstract fun writeU1(v: IntU1)
 
     //region Big-endian
 
-    abstract fun writeU2be(v: Short)
+    abstract fun writeU2be(v: IntU2)
 
-    abstract fun writeU4be(v: Int)
+    abstract fun writeU4be(v: IntU4)
 
-    abstract fun writeU8be(v: Long)
+    abstract fun writeU8be(v: IntU8)
 
     //endregion
 
     //region Little-endian
 
-    abstract fun writeU2le(v: Short)
+    abstract fun writeU2le(v: IntU2)
 
-    abstract fun writeU4le(v: Int)
+    abstract fun writeU4le(v: IntU4)
 
-    abstract fun writeU8le(v: Long)
+    abstract fun writeU8le(v: IntU8)
 
     //endregion
 

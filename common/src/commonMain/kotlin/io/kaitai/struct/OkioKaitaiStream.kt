@@ -118,24 +118,24 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Signed
 
-    override fun readS1(): Byte {
+    override fun readS1(): IntS1 {
         alignToByte()
         return sourceBuffer.readByte()
     }
 
     //region Big-endian
 
-    override fun readS2be(): Short {
+    override fun readS2be(): IntS2 {
         alignToByte()
         return sourceBuffer.readShort()
     }
 
-    override fun readS4be(): Int {
+    override fun readS4be(): IntS4 {
         alignToByte()
         return sourceBuffer.readInt()
     }
 
-    override fun readS8be(): Long {
+    override fun readS8be(): IntS8 {
         alignToByte()
         return sourceBuffer.readLong()
     }
@@ -144,17 +144,17 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Little-endian
 
-    override fun readS2le(): Short {
+    override fun readS2le(): IntS2 {
         alignToByte()
         return sourceBuffer.readShortLe()
     }
 
-    override fun readS4le(): Int {
+    override fun readS4le(): IntS4 {
         alignToByte()
         return sourceBuffer.readIntLe()
     }
 
-    override fun readS8le(): Long {
+    override fun readS8le(): IntS8 {
         alignToByte()
         return sourceBuffer.readLongLe()
     }
@@ -165,21 +165,21 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Unsigned
 
-    override fun readU1(): Byte {
-        return readS1()
+    override fun readU1(): IntU1 {
+        return readS1().toIntU1()
     }
 
     //region Big-endian
 
-    override fun readU2be(): Short {
-        return readS2be()
+    override fun readU2be(): IntU2 {
+        return readS2be().toIntU2()
     }
 
-    override fun readU4be(): Int {
-        return readS4be()
+    override fun readU4be(): IntU4 {
+        return readS4be().toIntU4()
     }
 
-    override fun readU8be(): Long {
+    override fun readU8be(): IntU8 {
         return readS8be()
     }
 
@@ -187,15 +187,15 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Little-endian
 
-    override fun readU2le(): Short {
-        return readS2le()
+    override fun readU2le(): IntU2 {
+        return readS2le().toIntU2()
     }
 
-    override fun readU4le(): Int {
-        return readS4le()
+    override fun readU4le(): IntU4 {
+        return readS4le().toIntU4()
     }
 
-    override fun readU8le(): Long {
+    override fun readU8le(): IntU8 {
         return readS8le()
     }
 
@@ -302,24 +302,24 @@ class OkioKaitaiStream : KaitaiStream {
     /**
      * Writes one signed 1-byte integer.
      */
-    override fun writeS1(v: Byte) {
+    override fun writeS1(v: IntS1) {
         writeAlignToByte()
         sinkBuffer.writeByte(v.toInt())
     }
 
     //region Big-endian
 
-    override fun writeS2be(v: Short) {
+    override fun writeS2be(v: IntS2) {
         writeAlignToByte()
         sinkBuffer.writeShort(v.toInt())
     }
 
-    override fun writeS4be(v: Int) {
+    override fun writeS4be(v: IntS4) {
         writeAlignToByte()
         sinkBuffer.writeInt(v)
     }
 
-    override fun writeS8be(v: Long) {
+    override fun writeS8be(v: IntS8) {
         writeAlignToByte()
         sinkBuffer.writeLong(v)
     }
@@ -328,17 +328,17 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Little-endian
 
-    override fun writeS2le(v: Short) {
+    override fun writeS2le(v: IntS2) {
         writeAlignToByte()
         sinkBuffer.writeShortLe(v.toInt())
     }
 
-    override fun writeS4le(v: Int) {
+    override fun writeS4le(v: IntS4) {
         writeAlignToByte()
         sinkBuffer.writeIntLe(v)
     }
 
-    override fun writeS8le(v: Long) {
+    override fun writeS8le(v: IntS8) {
         writeAlignToByte()
         sinkBuffer.writeLongLe(v)
     }
@@ -349,21 +349,21 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Unsigned
 
-    override fun writeU1(v: Byte) {
-        writeS1(v)
+    override fun writeU1(v: IntU1) {
+        writeS1(v.toIntS1())
     }
 
     //region Big-endian
 
-    override fun writeU2be(v: Short) {
-        writeS2be(v)
+    override fun writeU2be(v: IntU2) {
+        writeS2be(v.toIntS2())
     }
 
-    override fun writeU4be(v: Int) {
-        writeS4be(v)
+    override fun writeU4be(v: IntU4) {
+        writeS4be(v.toIntS4())
     }
 
-    override fun writeU8be(v: Long) {
+    override fun writeU8be(v: IntU8) {
         writeS8be(v)
     }
 
@@ -371,15 +371,15 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Little-endian
 
-    override fun writeU2le(v: Short) {
-        writeS2le(v)
+    override fun writeU2le(v: IntU2) {
+        writeS2le(v.toIntS2())
     }
 
-    override fun writeU4le(v: Int) {
-        writeS4le(v)
+    override fun writeU4le(v: IntU4) {
+        writeS4le(v.toIntS4())
     }
 
-    override fun writeU8le(v: Long) {
+    override fun writeU8le(v: IntU8) {
         writeS8le(v)
     }
 
