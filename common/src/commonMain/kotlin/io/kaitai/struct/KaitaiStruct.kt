@@ -9,8 +9,7 @@ package io.kaitai.struct
 abstract class KaitaiStruct(io: KaitaiStream) {
     open var _io: KaitaiStream = io
         protected set
-    open var _parent: KaitaiStruct? = null
-        protected set
+    open val _parent: KaitaiStruct? = null
 
     /**
      * KaitaiStruct object that supports reading from a supplied stream object.
