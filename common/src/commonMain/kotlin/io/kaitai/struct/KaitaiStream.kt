@@ -110,25 +110,25 @@ abstract class KaitaiStream : Closeable {
 
     //region Unsigned
 
-    abstract fun readU1(): UByte
+    abstract fun readU1(): Byte
 
     //region Big-endian
 
-    abstract fun readU2be(): UShort
+    abstract fun readU2be(): Short
 
-    abstract fun readU4be(): UInt
+    abstract fun readU4be(): Int
 
-    abstract fun readU8be(): ULong
+    abstract fun readU8be(): Long
 
     //endregion
 
     //region Little-endian
 
-    abstract fun readU2le(): UShort
+    abstract fun readU2le(): Short
 
-    abstract fun readU4le(): UInt
+    abstract fun readU4le(): Int
 
-    abstract fun readU8le(): ULong
+    abstract fun readU8le(): Long
 
     //endregion
 
@@ -330,25 +330,25 @@ abstract class KaitaiStream : Closeable {
 
     //region Unsigned
 
-    abstract fun writeU1(v: UByte)
+    abstract fun writeU1(v: Byte)
 
     //region Big-endian
 
-    abstract fun writeU2be(v: UShort)
+    abstract fun writeU2be(v: Short)
 
-    abstract fun writeU4be(v: UInt)
+    abstract fun writeU4be(v: Int)
 
-    abstract fun writeU8be(v: ULong)
+    abstract fun writeU8be(v: Long)
 
     //endregion
 
     //region Little-endian
 
-    abstract fun writeU2le(v: UShort)
+    abstract fun writeU2le(v: Short)
 
-    abstract fun writeU4le(v: UInt)
+    abstract fun writeU4le(v: Int)
 
-    abstract fun writeU8le(v: ULong)
+    abstract fun writeU8le(v: Long)
 
     //endregion
 

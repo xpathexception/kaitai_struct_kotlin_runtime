@@ -165,38 +165,38 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Unsigned
 
-    override fun readU1(): UByte {
-        return readS1().toUByte()
+    override fun readU1(): Byte {
+        return readS1()
     }
 
     //region Big-endian
 
-    override fun readU2be(): UShort {
-        return readS2be().toUShort()
+    override fun readU2be(): Short {
+        return readS2be()
     }
 
-    override fun readU4be(): UInt {
-        return readS4be().toUInt()
+    override fun readU4be(): Int {
+        return readS4be()
     }
 
-    override fun readU8be(): ULong {
-        return readS8be().toULong()
+    override fun readU8be(): Long {
+        return readS8be()
     }
 
     //endregion
 
     //region Little-endian
 
-    override fun readU2le(): UShort {
-        return readS2le().toUShort()
+    override fun readU2le(): Short {
+        return readS2le()
     }
 
-    override fun readU4le(): UInt {
-        return readS4le().toUInt()
+    override fun readU4le(): Int {
+        return readS4le()
     }
 
-    override fun readU8le(): ULong {
-        return readS8le().toULong()
+    override fun readU8le(): Long {
+        return readS8le()
     }
 
     //endregion
@@ -349,38 +349,38 @@ class OkioKaitaiStream : KaitaiStream {
 
     //region Unsigned
 
-    override fun writeU1(v: UByte) {
-        writeS1(v.toByte())
+    override fun writeU1(v: Byte) {
+        writeS1(v)
     }
 
     //region Big-endian
 
-    override fun writeU2be(v: UShort) {
-        writeS2be(v.toShort())
+    override fun writeU2be(v: Short) {
+        writeS2be(v)
     }
 
-    override fun writeU4be(v: UInt) {
-        writeS4be(v.toInt())
+    override fun writeU4be(v: Int) {
+        writeS4be(v)
     }
 
-    override fun writeU8be(v: ULong) {
-        writeS8be(v.toLong())
+    override fun writeU8be(v: Long) {
+        writeS8be(v)
     }
 
     //endregion
 
     //region Little-endian
 
-    override fun writeU2le(v: UShort) {
-        writeS2le(v.toShort())
+    override fun writeU2le(v: Short) {
+        writeS2le(v)
     }
 
-    override fun writeU4le(v: UInt) {
-        writeS4le(v.toInt())
+    override fun writeU4le(v: Int) {
+        writeS4le(v)
     }
 
-    override fun writeU8le(v: ULong) {
-        writeS8le(v.toLong())
+    override fun writeU8le(v: Long) {
+        writeS8le(v)
     }
 
     //endregion
