@@ -6,6 +6,7 @@ plugins {
 kotlin {
     jvm()
     iosSimulatorArm64()
+    macosArm64()
     sourceSets {
         commonMain.dependencies {
             api(libs.kotlin.stdlib)
@@ -19,7 +20,7 @@ kotlin {
 }
 
 group = "io.kaitai.struct"
-version = "0.1.10"
+version = "0.1.11"
 
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")

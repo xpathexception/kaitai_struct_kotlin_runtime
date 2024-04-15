@@ -10,8 +10,8 @@ class OkioKaitaiStream : KaitaiStream {
     private val source: Source
     private val sourceBuffer: BufferedSource
 
-    private val sink: Sink
-    private val sinkBuffer: BufferedSink
+    private val sink: Sink?
+    private val sinkBuffer: BufferedSink?
 
     constructor(fileName: String) : super() {
         handle = FileSystem.SYSTEM.openReadOnly(fileName.toPath(true))
@@ -19,8 +19,8 @@ class OkioKaitaiStream : KaitaiStream {
         source = handle.source()
         sourceBuffer = source.buffer()
 
-        sink = handle.sink()
-        sinkBuffer = sink.buffer()
+        sink = null //handle.sink()
+        sinkBuffer = null //sink.buffer()
     }
 
     constructor() {
@@ -50,8 +50,8 @@ class OkioKaitaiStream : KaitaiStream {
         sourceBuffer.close()
         source.close()
 
-        sinkBuffer.close()
-        sink.close()
+        sinkBuffer?.close()
+        sink?.close()
 
         handle.close()
     }
@@ -304,24 +304,24 @@ class OkioKaitaiStream : KaitaiStream {
      */
     override fun writeS1(v: IntS1) {
         writeAlignToByte()
-        sinkBuffer.writeByte(v.toInt())
+        sinkBuffer?.writeByte(v.toInt())
     }
 
     //region Big-endian
 
     override fun writeS2be(v: IntS2) {
         writeAlignToByte()
-        sinkBuffer.writeShort(v.toInt())
+        sinkBuffer?.writeShort(v.toInt())
     }
 
     override fun writeS4be(v: IntS4) {
         writeAlignToByte()
-        sinkBuffer.writeInt(v)
+        sinkBuffer?.writeInt(v)
     }
 
     override fun writeS8be(v: IntS8) {
         writeAlignToByte()
-        sinkBuffer.writeLong(v)
+        sinkBuffer?.writeLong(v)
     }
 
     //endregion
@@ -330,17 +330,17 @@ class OkioKaitaiStream : KaitaiStream {
 
     override fun writeS2le(v: IntS2) {
         writeAlignToByte()
-        sinkBuffer.writeShortLe(v.toInt())
+        sinkBuffer?.writeShortLe(v.toInt())
     }
 
     override fun writeS4le(v: IntS4) {
         writeAlignToByte()
-        sinkBuffer.writeIntLe(v)
+        sinkBuffer?.writeIntLe(v)
     }
 
     override fun writeS8le(v: IntS8) {
         writeAlignToByte()
-        sinkBuffer.writeLongLe(v)
+        sinkBuffer?.writeLongLe(v)
     }
 
     //endregion
@@ -435,8 +435,8 @@ class OkioKaitaiStream : KaitaiStream {
      * @param buf byte array to write
      */
     override fun writeBytesNotAligned(buf: ByteArray) {
-        sinkBuffer.write(buf)
-        sinkBuffer.flush()
+        sinkBuffer?.write(buf)
+        sinkBuffer?.flush()
     }
 
     //endregion
