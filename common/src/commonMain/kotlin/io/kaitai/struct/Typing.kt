@@ -10,6 +10,10 @@ internal typealias IntS2 = Short
 internal typealias IntS4 = Int
 internal typealias IntS8 = Long
 
+internal typealias Bits = Long
+internal typealias IntC = Int
+internal typealias FloatC = Double
+
 internal inline fun IntU1.toIntS1(): IntS1 = toByte()
 internal inline fun IntU2.toIntS2(): IntS2 = toShort()
 internal inline fun IntU4.toIntS4(): IntS4 = toInt()
