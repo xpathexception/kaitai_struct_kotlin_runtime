@@ -1,5 +1,6 @@
 package io.kaitai.struct
 
+import io.kaitai.struct.typing.*
 import okio.*
 import okio.Path.Companion.toPath
 import okio.fakefilesystem.FakeFileSystem
