@@ -7,9 +7,11 @@ package io.kaitai.struct
  * @param _io stream object that this KaitaiStruct-based structure was parsed from.
  */
 abstract class KaitaiStruct(io: KaitaiStream) {
-    open var _io: KaitaiStream = io
-        protected set
+    open var _io: KaitaiStream = io; protected set
+    fun _io(): KaitaiStream = _io
+
     open val _parent: KaitaiStruct? = null
+    open fun _parent() = requireNotNull(_parent)
 
     /**
      * KaitaiStruct object that supports reading from a supplied stream object.

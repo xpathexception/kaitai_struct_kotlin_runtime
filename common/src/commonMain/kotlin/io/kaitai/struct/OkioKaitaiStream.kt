@@ -64,7 +64,7 @@ class OkioKaitaiStream : KaitaiStream {
      *
      * @return true if we are located at the end of the stream
      */
-    override val isEof: Boolean get() = !(!sourceBuffer.exhausted() || (!bitsWriteMode && bitsLeft > 0))
+    override fun isEof(): Boolean = !(!sourceBuffer.exhausted() || (!bitsWriteMode && bitsLeft > 0))
 
     /**
      * Set stream pointer to designated position (Long).

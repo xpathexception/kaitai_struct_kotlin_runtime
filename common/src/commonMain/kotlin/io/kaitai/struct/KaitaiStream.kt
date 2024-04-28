@@ -2,8 +2,11 @@ package io.kaitai.struct
 
 import io.kaitai.struct.typing.*
 import okio.*
+import kotlin.contracts.ExperimentalContracts
+import kotlin.contracts.contract
 import kotlin.experimental.xor
 import kotlin.jvm.JvmField
+import kotlin.jvm.JvmName
 import kotlin.math.min
 
 /**
@@ -51,18 +54,20 @@ abstract class KaitaiStream : Closeable {
      * @return pointer position, number of bytes from the beginning of the stream
      */
     abstract val pos: Long
+    fun pos() = pos
 
     /**
      * Get total size of the stream in bytes.
      * @return size of the stream in bytes
      */
     abstract val size: Long
+    fun size() = size
 
     /**
      * Check if stream pointer is at the end of stream.
      * @return true if we are located at the end of the stream
      */
-    abstract val isEof: Boolean
+    abstract fun isEof(): Boolean
 
     /**
      * Set stream pointer to designated position (int).
@@ -268,6 +273,18 @@ abstract class KaitaiStream : Closeable {
     abstract fun readBytesFull(): ByteArray
 
     abstract fun readBytesTerm(term: Byte, includeTerm: Boolean, consumeTerm: Boolean, eosError: Boolean): ByteArray
+
+    inline fun readBytesTerm(term: Short, includeTerm: Boolean, consumeTerm: Boolean, eosError: Boolean): ByteArray {
+        return readBytesTerm(term.toByte(), includeTerm, consumeTerm, eosError)
+    }
+
+    inline fun readBytesTerm(term: Int, includeTerm: Boolean, consumeTerm: Boolean, eosError: Boolean): ByteArray {
+        return readBytesTerm(term.toByte(), includeTerm, consumeTerm, eosError)
+    }
+
+    inline fun readBytesTerm(term: Long, includeTerm: Boolean, consumeTerm: Boolean, eosError: Boolean): ByteArray {
+        return readBytesTerm(term.toByte(), includeTerm, consumeTerm, eosError)
+    }
 
     /**
      * Checks if supplied number of bytes is a valid number of elements for Java
@@ -669,7 +686,8 @@ abstract class KaitaiStream : Closeable {
          * @param key value to XOR with
          * @return processed data
          */
-        fun processXor(data: ByteArray, key: Byte): ByteArray {
+        fun processXor(data: ByteArray?, key: Byte): ByteArray {
+            requireNotNull(data)
             return ByteArray(data.size) { idx ->
                 data[idx] xor key
             }
@@ -684,7 +702,8 @@ abstract class KaitaiStream : Closeable {
          * @param key array of bytes to XOR with
          * @return processed data
          */
-        fun processXor(data: ByteArray, key: ByteArray): ByteArray {
+        fun processXor(data: ByteArray?, key: ByteArray): ByteArray {
+            requireNotNull(data)
             return ByteArray(data.size) { idx ->
                 data[idx] xor key[idx % key.size]
             }
@@ -701,7 +720,8 @@ abstract class KaitaiStream : Closeable {
          *
          * @return copy of source array with requested shift applied
          */
-        fun processRotateLeft(data: ByteArray, amount: Int, groupSize: Int): ByteArray {
+        fun processRotateLeft(data: ByteArray?, amount: Int, groupSize: Int): ByteArray {
+            requireNotNull(data)
             require(groupSize == 1) {
                 "Unable to rotate group of $groupSize bytes yet"
             }
@@ -722,7 +742,8 @@ abstract class KaitaiStream : Closeable {
          *
          * @throws RuntimeException if data can't be decoded
          */
-        fun processZlib(data: ByteArray): ByteArray {
+        fun processZlib(data: ByteArray?): ByteArray {
+            requireNotNull(data)
             return Buffer().apply {
                 write(data)
             }.use { sourceBuffer ->
@@ -737,7 +758,8 @@ abstract class KaitaiStream : Closeable {
             }
         }
 
-        fun unprocessZlib(data: ByteArray): ByteArray {
+        fun unprocessZlib(data: ByteArray?): ByteArray {
+            requireNotNull(data)
             return Buffer().use { targetBuffer ->
                 targetBuffer.deflate().use { target ->
                     Buffer().apply {
@@ -789,12 +811,12 @@ abstract class KaitaiStream : Closeable {
      * "expected", but it turned out that it's not.
      */
     open class ValidationNotEqualError(
-        protected val expected: Any,
-        protected val actual: Any,
+        protected val expected: Any?,
+        protected val actual: Any?,
         io: KaitaiStream?,
         srcPath: String,
     ) : ValidationFailedError(
-        "not equal, expected ${expected.asString}, but got ${actual.asString}", io, srcPath
+        "not equal, expected ${expected?.asString}, but got ${actual?.asString}", io, srcPath
     )
 
     open class ValidationLessThanError : ValidationFailedError {
@@ -812,8 +834,8 @@ abstract class KaitaiStream : Closeable {
         }
 
         constructor(
-            min: Any,
-            actual: Any,
+            min: Any?,
+            actual: Any?,
             io: KaitaiStream?,
             srcPath: String,
         ) : super("not in range, min $min, but got $actual", io, srcPath) {
@@ -839,8 +861,8 @@ abstract class KaitaiStream : Closeable {
         }
 
         constructor(
-            max: Any,
-            actual: Any,
+            max: Any?,
+            actual: Any?,
             io: KaitaiStream?,
             srcPath: String,
         ) : super("not in range, max $max, but got $actual", io, srcPath) {
@@ -850,7 +872,7 @@ abstract class KaitaiStream : Closeable {
     }
 
     class ValidationNotAnyOfError(
-        protected val actual: Any,
+        protected val actual: Any?,
         io: KaitaiStream?,
         srcPath: String,
     ) : ValidationFailedError(
@@ -858,7 +880,7 @@ abstract class KaitaiStream : Closeable {
     )
 
     open class ValidationExprError(
-        protected val actual: Any,
+        protected val actual: Any?,
         io: KaitaiStream?,
         srcPath: String,
     ) : ValidationFailedError(
