@@ -44,7 +44,7 @@ class OkioKaitaiStream : KaitaiStream {
     }
 
     override fun substream(n: Long): KaitaiStream {
-        TODO("Not yet implemented")
+        return OkioKaitaiStream(sourceBuffer.readByteArray(n))
     }
 
     override fun close() {
@@ -278,7 +278,7 @@ class OkioKaitaiStream : KaitaiStream {
                 }
             }
 
-            seek(pos - 1)
+            //seek(pos - 1)
 
             val c = sourceBuffer.readByte()
             if (c == term) {

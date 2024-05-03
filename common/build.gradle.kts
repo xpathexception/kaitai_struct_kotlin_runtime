@@ -20,7 +20,7 @@ kotlin {
 }
 
 group = "io.kaitai.struct"
-version = "0.1.48"
+version = "0.1.56"
 
 val javadocJar by tasks.registering(Jar::class) {
     archiveClassifier.set("javadoc")
