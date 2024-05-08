@@ -167,17 +167,17 @@ class OkioKaitaiStream : KaitaiStream {
     //region Unsigned
 
     override fun readU1(): IntU1 {
-        return readS1().toIntU1()
+        return readS1().toIntU1() and 0xff
     }
 
     //region Big-endian
 
     override fun readU2be(): IntU2 {
-        return readS2be().toIntU2()
+        return readS2be().toIntU2()and 0xffff
     }
 
     override fun readU4be(): IntU4 {
-        return readS4be().toIntU4()
+        return readS4be().toIntU4() and 0xffffffffL
     }
 
     override fun readU8be(): IntU8 {
@@ -189,11 +189,11 @@ class OkioKaitaiStream : KaitaiStream {
     //region Little-endian
 
     override fun readU2le(): IntU2 {
-        return readS2le().toIntU2()
+        return readS2le().toIntU2() and 0xffff
     }
 
     override fun readU4le(): IntU4 {
-        return readS4le().toIntU4()
+        return readS4le().toIntU4() and 0xffffffffL
     }
 
     override fun readU8le(): IntU8 {
