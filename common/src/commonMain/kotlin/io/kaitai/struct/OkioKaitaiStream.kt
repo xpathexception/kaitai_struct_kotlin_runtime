@@ -4,6 +4,7 @@ import io.kaitai.struct.typing.*
 import okio.*
 import okio.Path.Companion.toPath
 import okio.fakefilesystem.FakeFileSystem
+import kotlin.random.Random
 
 class OkioKaitaiStream : KaitaiStream {
     private val handle: FileHandle
@@ -24,8 +25,9 @@ class OkioKaitaiStream : KaitaiStream {
         sinkBuffer = null //sink.buffer()
     }
 
+    @OptIn(ExperimentalStdlibApi::class)
     constructor() {
-        handle = FakeFileSystem().openReadWrite("in-memory".toPath())
+        handle = FakeFileSystem().openReadWrite("in-memory-${Random.nextBytes(16).toHexString()}".toPath())
 
         source = handle.source()
         sourceBuffer = source.buffer()
@@ -82,6 +84,7 @@ class OkioKaitaiStream : KaitaiStream {
         }
 
         handle.reposition(source, newPos)
+        handle.reposition(sourceBuffer, newPos)
     }
 
     /**
@@ -99,7 +102,7 @@ class OkioKaitaiStream : KaitaiStream {
      */
     override val pos: Long
         get() {
-            return handle.position(source) + (if ((bitsWriteMode && bitsLeft > 0)) 1 else 0)
+            return handle.position(sourceBuffer) + (if ((bitsWriteMode && bitsLeft > 0)) 1 else 0)
         }
 
     /**
@@ -181,7 +184,7 @@ class OkioKaitaiStream : KaitaiStream {
     }
 
     override fun readU8be(): IntU8 {
-        return readS8be()
+        return readS8be().toIntU8()
     }
 
     //endregion
@@ -197,7 +200,7 @@ class OkioKaitaiStream : KaitaiStream {
     }
 
     override fun readU8le(): IntU8 {
-        return readS8le()
+        return readS8le().toIntU8()
     }
 
     //endregion
@@ -283,7 +286,11 @@ class OkioKaitaiStream : KaitaiStream {
             val c = sourceBuffer.readByte()
             if (c == term) {
                 if (includeTerm) buf.writeByte(c.toInt())
-                if (!consumeTerm) handle.reposition(source, handle.position(source) - 1)
+                if (!consumeTerm) {
+                    val position = handle.position(sourceBuffer) - 1
+                    handle.reposition(source, position)
+                    handle.reposition(sourceBuffer, position)
+                }
                 return buf.readByteArray()
             }
             buf.writeByte(c.toInt())

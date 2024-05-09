@@ -1,5 +1,7 @@
 package io.kaitai.struct.typing
 
+import java.nio.charset.Charset
+
 actual fun ByteArray.decodeToString(
     startIndex: Int,
     endIndex: Int,
@@ -12,7 +14,7 @@ actual fun ByteArray.decodeToString(
         "UTF-16BE" -> Charsets.UTF_16BE
         "UTF-16LE" -> Charsets.UTF_16LE
         "UTF-8" -> Charsets.UTF_8
-        else -> null
+        else -> runCatching { Charset.forName(encoding) }.getOrNull()
     }
 
     return if (charset != null) {

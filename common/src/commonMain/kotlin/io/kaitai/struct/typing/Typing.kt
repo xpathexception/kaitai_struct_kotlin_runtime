@@ -50,25 +50,25 @@ inline fun IntU4.toIntS8(): IntS8 = toLong()
 
 //region S to U
 
-inline fun IntS1.toIntU1(): IntU1 = toInt()
-inline fun IntS1.toIntU2(): IntU2 = toInt()
-inline fun IntS1.toIntU4(): IntU4 = toLong()
-inline fun IntS1.toIntU8(): IntU8 = toLong()
+inline fun IntS1.toIntU1(): IntU1 = toUByte().toInt()
+inline fun IntS1.toIntU2(): IntU2 = toUByte().toInt()
+inline fun IntS1.toIntU4(): IntU4 = toUByte().toLong()
+inline fun IntS1.toIntU8(): IntU8 = toUByte().toLong()
 
-inline fun IntS2.toIntU1(): IntU1 = toInt()
-inline fun IntS2.toIntU2(): IntU2 = toInt()
-inline fun IntS2.toIntU4(): IntU4 = toLong()
-inline fun IntS2.toIntU8(): IntU8 = toLong()
+inline fun IntS2.toIntU1(): IntU1 = toUShort().toInt()
+inline fun IntS2.toIntU2(): IntU2 = toUShort().toInt()
+inline fun IntS2.toIntU4(): IntU4 = toUShort().toLong()
+inline fun IntS2.toIntU8(): IntU8 = toUShort().toLong()
 
-inline fun IntS4.toIntU1(): IntU1 = toInt()
-inline fun IntS4.toIntU2(): IntU2 = toInt()
-inline fun IntS4.toIntU4(): IntU4 = toLong()
-inline fun IntS4.toIntU8(): IntU8 = toLong()
+inline fun IntS4.toIntU1(): IntU1 = toUInt().toInt()
+inline fun IntS4.toIntU2(): IntU2 = toUInt().toInt()
+inline fun IntS4.toIntU4(): IntU4 = toUInt().toLong()
+inline fun IntS4.toIntU8(): IntU8 = toUInt().toLong()
 
-inline fun IntS8.toIntU1(): IntU1 = toInt()
-inline fun IntS8.toIntU2(): IntU2 = toInt()
-inline fun IntS8.toIntU4(): IntU4 = toLong()
-inline fun IntS8.toIntU8(): IntU8 = toLong()
+inline fun IntS8.toIntU1(): IntU1 = toULong().toInt()
+inline fun IntS8.toIntU2(): IntU2 = toULong().toInt()
+inline fun IntS8.toIntU4(): IntU4 = toULong().toLong()
+inline fun IntS8.toIntU8(): IntU8 = toULong().toLong()
 
 //endregion S to U
 
