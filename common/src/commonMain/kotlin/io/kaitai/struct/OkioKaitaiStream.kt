@@ -7,6 +7,7 @@ import okio.fakefilesystem.FakeFileSystem
 import kotlin.random.Random
 
 class OkioKaitaiStream : KaitaiStream {
+    private val memoryPath: Path?
     private val handle: FileHandle
 
     private val source: Source
@@ -16,6 +17,7 @@ class OkioKaitaiStream : KaitaiStream {
     private val sinkBuffer: BufferedSink?
 
     constructor(fileName: String) : super() {
+        memoryPath = null
         handle = FileSystem.SYSTEM.openReadOnly(fileName.toPath(true))
 
         source = handle.source()
@@ -27,7 +29,8 @@ class OkioKaitaiStream : KaitaiStream {
 
     @OptIn(ExperimentalStdlibApi::class)
     constructor() {
-        handle = FakeFileSystem().openReadWrite("in-memory-${Random.nextBytes(16).toHexString()}".toPath())
+        memoryPath = "in-memory-${Random.nextBytes(16).toHexString()}".toPath()
+        handle = MEMORY.openReadWrite(memoryPath)
 
         source = handle.source()
         sourceBuffer = source.buffer()
@@ -57,6 +60,7 @@ class OkioKaitaiStream : KaitaiStream {
         sink?.close()
 
         handle.close()
+        if (memoryPath != null) MEMORY.delete(memoryPath)
     }
 
     //region Stream positioning
@@ -313,6 +317,7 @@ class OkioKaitaiStream : KaitaiStream {
     override fun writeS1(v: IntS1) {
         writeAlignToByte()
         sinkBuffer?.writeByte(v.toInt())
+        sinkBuffer?.flush()
     }
 
     //region Big-endian
@@ -320,16 +325,19 @@ class OkioKaitaiStream : KaitaiStream {
     override fun writeS2be(v: IntS2) {
         writeAlignToByte()
         sinkBuffer?.writeShort(v.toInt())
+        sinkBuffer?.flush()
     }
 
     override fun writeS4be(v: IntS4) {
         writeAlignToByte()
         sinkBuffer?.writeInt(v)
+        sinkBuffer?.flush()
     }
 
     override fun writeS8be(v: IntS8) {
         writeAlignToByte()
         sinkBuffer?.writeLong(v)
+        sinkBuffer?.flush()
     }
 
     //endregion
@@ -339,16 +347,19 @@ class OkioKaitaiStream : KaitaiStream {
     override fun writeS2le(v: IntS2) {
         writeAlignToByte()
         sinkBuffer?.writeShortLe(v.toInt())
+        sinkBuffer?.flush()
     }
 
     override fun writeS4le(v: IntS4) {
         writeAlignToByte()
         sinkBuffer?.writeIntLe(v)
+        sinkBuffer?.flush()
     }
 
     override fun writeS8le(v: IntS8) {
         writeAlignToByte()
         sinkBuffer?.writeLongLe(v)
+        sinkBuffer?.flush()
     }
 
     //endregion
@@ -450,4 +461,8 @@ class OkioKaitaiStream : KaitaiStream {
     //endregion
 
     //endregion
+
+    companion object {
+        private val MEMORY = FakeFileSystem()
+    }
 }

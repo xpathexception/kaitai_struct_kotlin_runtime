@@ -791,7 +791,7 @@ abstract class KaitaiStream : Closeable {
      */
     open class KaitaiStructError(
         msg: String,
-        protected val srcPath: String,
+        val srcPath: String,
     ) : RuntimeException("$srcPath: $msg")
 
     /**
@@ -811,8 +811,8 @@ abstract class KaitaiStream : Closeable {
      * "expected", but it turned out that it's not.
      */
     open class ValidationNotEqualError(
-        protected val expected: Any?,
-        protected val actual: Any?,
+        val expected: Any?,
+        val actual: Any?,
         io: KaitaiStream?,
         srcPath: String,
     ) : ValidationFailedError(
@@ -820,8 +820,8 @@ abstract class KaitaiStream : Closeable {
     )
 
     open class ValidationLessThanError : ValidationFailedError {
-        protected val min: Any?
-        protected val actual: Any?
+        val min: Any?
+        val actual: Any?
 
         constructor(
             expected: ByteArray,
@@ -845,8 +845,8 @@ abstract class KaitaiStream : Closeable {
     }
 
     open class ValidationGreaterThanError : ValidationFailedError {
-        protected val max: Any?
-        protected val actual: Any?
+        val max: Any?
+        val actual: Any?
 
         constructor(
             expected: ByteArray,
@@ -872,7 +872,7 @@ abstract class KaitaiStream : Closeable {
     }
 
     class ValidationNotAnyOfError(
-        protected val actual: Any?,
+        val actual: Any?,
         io: KaitaiStream?,
         srcPath: String,
     ) : ValidationFailedError(
